@@ -133,6 +133,48 @@ def jacobi(x, n):
 
 
 
+def r_i_sequence(m, digits_num):
+
+    b = 10
+    r_i = []
+    
+    r =1
+    for i in range(digits_num):
+        r_i.append(r)
+        r = (r * b) % m 
+
+    return r_i 
+
+    
+exp = r_i_sequence(7, 8)
+print(exp)
+
+
+def trial_division(n):
+    
+    prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
+
+    n_digits = [int(d) for d in str(n)]
+    
+    a_i = n_digits[::-1] #список з цифр n в оберненому порядку
+
+    
+    for p in prime:       
+        r_i_p_seq = r_i_sequence(p, len(a_i)) #послідовність r_i для р
+
+        sum_ = 0 #сума для а_i * r_i
+         
+        for i, a in enumerate(a_i):
+            sum_ += a * r_i_p_seq[i]
+
+        if sum_ % p == 0:
+            return n/p
+
+    return 'n не ділиться на малі прості числа'
+
+print(trial_division(2209))
+
+
 
 a=527
 
