@@ -34,7 +34,7 @@ def ro_metod_Polarda(n):    # Теж основна функція
     x_start=2
     y_start=2
     arr.append(0)
-    while arr[0]!=1:
+    while arr[0]!=1 and x_start<11:
         arr=algoritm_for_ro_metod_Polarda(x_start, y_start, n)
         x_start+=1
         y_start+=1
@@ -58,13 +58,14 @@ def algoritm_for_ro_metod_Polarda(x, y, n):
             arr.append(d)
         elif d==0:
             arr.append(0)
+            arr.append(0)
             
     return arr
         
         
         
 
-def function_for_Polard(x:int, n:int):
+def function_for_Polard(x, n):
     '''
     Допоміжна функція щоби при необхідності швидко змінити f(x)=x^2+1
     '''
@@ -132,7 +133,20 @@ def jacobi(x, n):
         return j
 
 
+def prime_factorization(n):
+    cheking_number=test_soloveia_shtrasena(n)
+    if cheking_number==True:
+        print(f"Число: {n} є складеним")
+        list_of_divisors=[]#список для дільників числа
+        '''тут місце для перевірки числа методом пробних ділень до 47, якщо дільник знайдено, то його тре вивести а n поділити на це число
+        '''
+        d=ro_metod_Polarda(n)
+        if d==0:
+            g=0
 
+
+    else:
+        print(f"Число: {n} є простим")
 
 a=527
 
