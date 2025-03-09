@@ -235,7 +235,7 @@ def continued_fraction(n, chain_len): #ланцюговий дріб
 
     a_i = [a]
 
-    for i in range(0, chain_len):
+    for i in range(chain_len):
 
         v = (n - u**2)//v
         alpha = (math.sqrt(n) + u)/v
@@ -244,8 +244,19 @@ def continued_fraction(n, chain_len): #ланцюговий дріб
 
         a_i.append(a)
 
-    return a_i
+    b_i = []
+    b_2 = 0  
+    b_1 = 1  
+
+    for i in a_i:
+        b = i * b_1 + b_2
+        b_i.append(b)
+        b_2, b_1 = b_1, b #зсуваємо
+
+    return b_i
+    
 
 print(continued_fraction(25511, 9))
+
 
     
