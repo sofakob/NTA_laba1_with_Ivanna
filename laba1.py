@@ -1,5 +1,6 @@
 import random
-
+from sympy import primerange, nextprime
+import math
 
 
 
