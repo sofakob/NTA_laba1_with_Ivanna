@@ -182,3 +182,46 @@ a=527
 
 c=ro_metod_Polarda(a)
 print(c)
+
+
+
+#територія Брілхарта-Моррісона
+
+
+def legendre(n, p):
+
+    n_mod_p = n%p
+
+    if n_mod_p == 0:
+        return 0
+
+    l = pow(n_mod_p, (p-1)//2, p) #за Ойлером
+
+    if l == 1:
+        return 1
+    else:
+        return -1
+
+print(legendre(25511, 29))
+
+
+def factor_B(n):
+
+    big_l = math.exp(math.sqrt(math.log(n) * math.log(math.log(n))))
+    a = 1/math.sqrt(2)
+
+    big_l_a = int(big_l**a)
+
+    list_of_prime = list(primerange(1, big_l_a)) #генерує список послідовних простих чисев в діапазоні 1<p<L^a
+
+    factor_base = []
+
+    for p in list_of_prime: #до факторної бази додаються всі прості, для яких символ Лежандра = 1
+        if legendre(n, p) == 1:
+            factor_base.append(p)
+
+    return factor_base
+
+print(factor_B(778320232076288167))
+
+
