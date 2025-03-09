@@ -214,7 +214,7 @@ def factor_B(n):
 
     list_of_prime = list(primerange(1, big_l_a)) #генерує список послідовних простих чисев в діапазоні 1<p<L^a
 
-    factor_base = [-1]
+    factor_base = [-1]  #ЧИ ТРЕБА ТУТ -1???
 
     for p in list_of_prime: #до факторної бази додаються всі прості, для яких символ Лежандра = 1
         if legendre(n, p) == 1:
