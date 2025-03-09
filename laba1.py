@@ -225,3 +225,27 @@ def factor_B(n):
 print(factor_B(778320232076288167))
 
 
+#швидше за все, окремою функцією не буде, буде в основній
+def continued_fraction(n, chain_len): #ланцюговий дріб
+
+    alpha = math.sqrt(n) #початкові значення
+    a = int(alpha)
+    u = a
+    v = 1
+
+    a_i = [a]
+
+    for i in range(0, chain_len):
+
+        v = (n - u**2)//v
+        alpha = (math.sqrt(n) + u)/v
+        a = int(alpha)
+        u = a*v - u
+
+        a_i.append(a)
+
+    return a_i
+
+print(continued_fraction(25511, 9))
+
+    
