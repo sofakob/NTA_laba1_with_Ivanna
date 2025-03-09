@@ -258,5 +258,24 @@ def continued_fraction(n, chain_len): #ланцюговий дріб
 
 print(continued_fraction(25511, 9))
 
+#Функція для перевірки на гладкість (b_i)^2modn
+def B_candidate(candidate, f_base): 
+    for p in f_base:
+        while candidate % p == 0:
+            candidate //= p
+    return candidate == 1 
 
+
+#перевірка роботи цієї функції
+n = 25511
+base = factor_B(n)
+list_ = continued_fraction(n, 9)
+
+can_list = []  
+for b in list_:
+    can = (b**2) % n
+    if B_candidate(can, base):
+        can_list.append(can)
+
+print(can_list)  
     
