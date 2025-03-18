@@ -40,7 +40,7 @@ def ro_metod_Polarda(n):    # Теж основна функція
         y_start+=1
 
 
-    return arr[1] 
+    return int(arr[1] )
 
 def algoritm_for_ro_metod_Polarda(x, y, n):
     '''
@@ -138,11 +138,29 @@ def prime_factorization(n):
     if cheking_number==True:
         print(f"Число: {n} є складеним")
         list_of_divisors=[]#список для дільників числа
-        '''тут місце для перевірки числа методом пробних ділень до 47, якщо дільник знайдено, то його тре вивести а n поділити на це число
-        '''
+        bool_function=True
+        while bool_function:
+            bool_function, d, n=trial_division(n)
+            if d!=1:
+                list_of_divisors.append(d)
+
+        
+
+
         d=ro_metod_Polarda(n)
-        if d==0:
-            g=0
+        if d!=0:
+            print(f"Дільник знайдено {d}")
+            list_of_divisors.append(d)
+            n/=d
+            n=int(n)
+            cheking_number=test_soloveia_shtrasena(n)
+            if cheking_number==False:
+                return list_of_divisors
+            '''Тут повинен бути алгоритм з Бріхардом-Моррісом або Померанцем'''
+
+
+
+            
 
 def r_i_sequence(m, digits_num):
 
@@ -166,7 +184,6 @@ def trial_division(n):
     prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
 
     n_digits = [int(d) for d in str(n)]
-    
     a_i = n_digits[::-1] #список з цифр n в оберненому порядку
 
     
@@ -179,19 +196,13 @@ def trial_division(n):
             sum_ += a * r_i_p_seq[i]
 
         if sum_ % p == 0:
-            return n/p
+            print(f"Дільник знайдено {p}")
+            return True, p, int(n/p) # на мою думку дивно, що дільники будуть плаваючими точками (Якщо проти видаляй)
 
-    return 'n не ділиться на малі прості числа'
+    return False, 1, n
 
-print(trial_division(2209))
+print(ro_metod_Polarda(4301))
 
+print(prime_factorization(796452306))
 
-
-    else:
-        print(f"Число: {n} є простим")
-
-a=527
-
-
-c=ro_metod_Polarda(a)
-print(c)
+ 
