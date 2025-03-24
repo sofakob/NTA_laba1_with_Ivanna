@@ -11,10 +11,15 @@ def test_soloveia_shtrasena(p):
     від довжини числа треба збільшувати k, але більше 40 не рекомендовано брати, загалом 10-20 ітерацій повинно вистачати
     Ця функція повертає булеве значення True, якщо число складене та False, якщо просте
     '''
+    p_int=int(p)
     k=10
+    if p<=2:
+        return False
     for i in range(k):
-         x=random.randint(2, int(p)-1)
-         gcd_p_x=evklid(p, x)
+         x=random.randint(2, p_int-1)
+         x=Decimal(x)
+        
+         gcd_p_x=gcd(p, x)
          if gcd_p_x==1:
              bool_function=check_psevdoprost_Euler(x, p)
              if bool_function:
@@ -34,8 +39,8 @@ def ro_metod_Polarda(n):    # Теж основна функція
     на вихід ми подаємо дільник
 '''
     arr=[]
-    x_start=2
-    y_start=2
+    x_start=Decimal(2)
+    y_start=Decimal(2)
     arr.append(0)
     while arr[0]!=1 and x_start<11:
         arr=algoritm_for_ro_metod_Polarda(x_start, y_start, n)
@@ -43,7 +48,7 @@ def ro_metod_Polarda(n):    # Теж основна функція
         y_start+=1
 
 
-    return int(arr[1] )
+    return int(arr[1])
 
 def algoritm_for_ro_metod_Polarda(x, y, n):
     '''
@@ -52,10 +57,10 @@ def algoritm_for_ro_metod_Polarda(x, y, n):
     '''
     d=1
     arr=[]
-    while d==1:
+    while d==1: 
         x=function_for_Polard(x, n)
         y=function_for_Polard(function_for_Polard(y, n), n)
-        d=evklid(abs(x-y), n)
+        d=gcd(abs(x-y), n)
         if d>1:
             arr.append(1)
             arr.append(d)
@@ -73,10 +78,12 @@ def function_for_Polard(x, n):
     Допоміжна функція щоби при необхідності швидко змінити f(x)=x^2+1
     '''
     t=(pow(x, 2)+1)%n
+    
     return  t
 
 
 def evklid(a, b):
+    
     '''
     Допоміжна функція обрахунок gcd, так як це алгоритм Евкліда то і назва така, чому не gcd, бо в моменті Евклідом назвати було зручніше
     '''
@@ -85,10 +92,10 @@ def evklid(a, b):
     while a!=b:
         if a<b:
             d=a
-            b-=a
+            b%=a
         else:
             d=b
-            a-=b
+            a%=b
     
 
     return d
@@ -147,18 +154,20 @@ def prime_factorization(n):
             bool_function, d, n=trial_division(n)
             if d!=1:
                 list_of_divisors.append(d)
+
+        
                 
 
         
 
 
         d=Decimal(ro_metod_Polarda(n))
+       
         if d!=0:
             print(f"Дільник знайдено {d}")
             list_of_divisors.append(d)
             #print(list_of_divisors)
             n/=d
-            n=int(n)
             cheking_number=test_soloveia_shtrasena(n)
             if cheking_number==False:
                 list_of_divisors.append(n)
@@ -169,6 +178,8 @@ def prime_factorization(n):
             else:
                 list_of_divisors.extend(divisori_BM)
         return list_of_divisors
+    else:
+        return "Число просте"
             
 
 
@@ -189,7 +200,7 @@ def r_i_sequence(m, digits_num):
 
     
 exp = r_i_sequence(7, 8)
-print(exp)
+
 
 
 def trial_division(n):
@@ -217,6 +228,7 @@ def trial_division(n):
 
 
 def gcd (a,b):
+    
     if a == 0 and b == 0:
         return
     elif b == 0:
@@ -259,19 +271,21 @@ def factor_B(n):
 
 
 def continued_fraction(n, chain_len): #ланцюговий дріб
+    n_sqrt=n.sqrt()
 
-    alpha = math.sqrt(n) #початкові значення
-    a = int(alpha)
+    alpha = n_sqrt#початкові значення
+    a = Decimal(int(alpha))
     u = a
-    v = 1
+    v = Decimal(1)
 
     a_i = [a]
 
     for i in range(chain_len):
 
         v = (n - u**2)//v
-        alpha = (math.sqrt(n) + u)/v
-        a = int(alpha)
+
+        alpha = (n_sqrt + u)/v
+        a = Decimal(int(alpha))
         u = a*v - u
 
         a_i.append(a)
@@ -371,13 +385,14 @@ def Brillhart_Morrison(n):
             y *= p ** count
         y = math.isqrt(y)  
 
-        candidate1 = gcd(x + y, n)
-        candidate2 = gcd(x - y, n)
+        candidate1 = Decimal(gcd(x + y, n))
+        candidate2 = Decimal(gcd(x - y, n))
+        
 
-        if not test_soloveia_shtrasena(int(candidate1)) and candidate1 not in [1, n]:
-            divisors.add(Decimal(candidate1))
-        if not test_soloveia_shtrasena(int(candidate2)) and candidate2 not in [1, n]:
-            divisors.add(Decimal(candidate2))
+        if not test_soloveia_shtrasena(candidate1) and candidate1 not in [1, n]:
+            divisors.add(candidate1)
+        if not test_soloveia_shtrasena(candidate2) and candidate2 not in [1, n]:
+            divisors.add(candidate2)
 
     if  divisors:
         for i in divisors:
@@ -392,6 +407,6 @@ def Brillhart_Morrison(n):
 
 
 
-print(prime_factorization(Decimal("2500744714570633849")))
+print(prime_factorization(Decimal("303983")))
 
  
