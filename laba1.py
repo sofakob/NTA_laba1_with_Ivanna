@@ -3,7 +3,7 @@ from sympy import primerange, nextprime
 import math
 import numpy as np
 import galois
-
+from decimal import Decimal
 
 
 def test_soloveia_shtrasena(p):             
@@ -13,7 +13,7 @@ def test_soloveia_shtrasena(p):
     '''
     k=10
     for i in range(k):
-         x=random.randint(2, p-1)
+         x=random.randint(2, int(p)-1)
          gcd_p_x=evklid(p, x)
          if gcd_p_x==1:
              bool_function=check_psevdoprost_Euler(x, p)
@@ -111,6 +111,7 @@ def jacobi(x, n):
     ''' 
     Символ Якобі, рекурсивний
     '''
+    x=Decimal(x)
     if x==0 or x==1:
         return x
     elif x==2:
@@ -146,14 +147,16 @@ def prime_factorization(n):
             bool_function, d, n=trial_division(n)
             if d!=1:
                 list_of_divisors.append(d)
+                
 
         
 
 
-        d=ro_metod_Polarda(n)
+        d=Decimal(ro_metod_Polarda(n))
         if d!=0:
             print(f"Дільник знайдено {d}")
             list_of_divisors.append(d)
+            #print(list_of_divisors)
             n/=d
             n=int(n)
             cheking_number=test_soloveia_shtrasena(n)
@@ -165,7 +168,7 @@ def prime_factorization(n):
                 return "я не можу знайти канонiчний розклад числа :("
             else:
                 list_of_divisors.extend(divisori_BM)
-                return list_of_divisors
+        return list_of_divisors
             
 
 
@@ -191,7 +194,7 @@ print(exp)
 
 def trial_division(n):
     
-    prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
+    prime = [Decimal(2), Decimal(3), Decimal(5), Decimal(7), Decimal(11), Decimal(13), Decimal(17), Decimal(19), Decimal(23), Decimal(29), Decimal(31), Decimal(37), Decimal(41), Decimal(43), Decimal(47)]
 
     n_digits = [int(d) for d in str(n)]
     a_i = n_digits[::-1] #список з цифр n в оберненому порядку
@@ -207,7 +210,8 @@ def trial_division(n):
 
         if sum_ % p == 0:
             print(f"Дільник знайдено {p}")
-            return True, p, int(n/p) # на мою думку дивно, що дільники будуть плаваючими точками (Якщо проти видаляй)
+            #print(n/p)
+            return True, p, n/p # на мою думку дивно, що дільники будуть плаваючими точками (Якщо проти видаляй)
 
     return False, 1, n
 
@@ -371,9 +375,9 @@ def Brillhart_Morrison(n):
         candidate2 = gcd(x - y, n)
 
         if not test_soloveia_shtrasena(int(candidate1)) and candidate1 not in [1, n]:
-            divisors.add(candidate1)
+            divisors.add(Decimal(candidate1))
         if not test_soloveia_shtrasena(int(candidate2)) and candidate2 not in [1, n]:
-            divisors.add(candidate2)
+            divisors.add(Decimal(candidate2))
 
     if  divisors:
         for i in divisors:
@@ -388,6 +392,6 @@ def Brillhart_Morrison(n):
 
 
 
-print(prime_factorization(901667173167834173))
+print(prime_factorization(Decimal("2500744714570633849")))
 
  
