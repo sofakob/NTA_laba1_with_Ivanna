@@ -384,9 +384,11 @@ def Brillhart_Morrison(n):
         for count, p in zip(p_counts, f_base): 
             y *= p ** count
         y = math.isqrt(y)  
+        x=Decimal(x)
+        y=Decimal(y)
 
-        candidate1 = Decimal(gcd(Decimal(x + y), n))
-        candidate2 = Decimal(gcd(Decimal(x - y), n))
+        candidate1 = Decimal(gcd(x + y, n))
+        candidate2 = Decimal(gcd(x - y, n))
         
 
         if not test_soloveia_shtrasena(candidate1) and candidate1 not in [1, n]:
