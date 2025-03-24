@@ -2,7 +2,7 @@ from sympy import primerange, nextprime
 import math
 import numpy as np
 import galois
-
+from laba1 import *
 
 def gcd (a,b):
     if a == 0 and b == 0:
@@ -162,9 +162,9 @@ def Brillhart_Morrison(n):
         candidate1 = gcd(x + y, n)
         candidate2 = gcd(x - y, n)
 
-        if candidate1 not in [1, n]:
+        if not test_soloveia_shtrasena(candidate1) and candidate1 not in [1, n]:
             divisors.add(candidate1)
-        if candidate2 not in [1, n]:
+        if not test_soloveia_shtrasena(candidate2) and candidate2 not in [1, n]:
             divisors.add(candidate2)
 
     return divisors
