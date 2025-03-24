@@ -12,7 +12,7 @@ def test_soloveia_shtrasena(p):
     Ця функція повертає булеве значення True, якщо число складене та False, якщо просте
     '''
     p_int=int(p)
-    k=10
+    k=20
     if p<=2:
         return False
     for i in range(k):
@@ -385,8 +385,8 @@ def Brillhart_Morrison(n):
             y *= p ** count
         y = math.isqrt(y)  
 
-        candidate1 = Decimal(gcd(x + y, n))
-        candidate2 = Decimal(gcd(x - y, n))
+        candidate1 = Decimal(gcd(Decimal(x + y), n))
+        candidate2 = Decimal(gcd(Decimal(x - y), n))
         
 
         if not test_soloveia_shtrasena(candidate1) and candidate1 not in [1, n]:
@@ -407,6 +407,6 @@ def Brillhart_Morrison(n):
 
 
 
-print(prime_factorization(Decimal("303983")))
+print(prime_factorization(Decimal("1515475730401555091")))
 
  
