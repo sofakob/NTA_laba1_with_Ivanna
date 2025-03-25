@@ -4,7 +4,7 @@ import math
 import numpy as np
 import galois
 from decimal import Decimal
-
+import time
 
 def test_soloveia_shtrasena(p):             
     '''Основна функція її юзаємо, на вхід приймається р, k можна змінювати, як я читала в залежності 
@@ -410,5 +410,119 @@ def Brillhart_Morrison(n):
 
 
 print(prime_factorization(Decimal("1515475730401555091")))
+      
+start_time = time.time()
+print(f"Дільник для числа 3009182572376191 {ro_metod_Polarda(Decimal("3009182572376191"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+start_time = time.time()
+print(f"Дільник для числа 3009182572376191 {Brillhart_Morrison(Decimal("3009182572376191"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
 
- 
+
+
+start_time = time.time()
+print(f"Дільник для числа 1021514194991569 {ro_metod_Polarda(Decimal("1021514194991569"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+start_time = time.time()
+print(f"Дільник для числа 1021514194991569 {Brillhart_Morrison(Decimal("1021514194991569"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+
+
+start_time = time.time()
+print(f"Дільник для числа 4000852962116741 {ro_metod_Polarda(Decimal("4000852962116741"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+start_time = time.time()
+print(f"Дільник для числа 4000852962116741 {Brillhart_Morrison(Decimal("4000852962116741"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+
+start_time = time.time()
+print(f"Дільник для числа 15196946347083 {ro_metod_Polarda(Decimal("15196946347083"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+start_time = time.time()
+print(f"Дільник для числа 15196946347083 {Brillhart_Morrison(Decimal("15196946347083"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+
+start_time = time.time()
+print(f"Дільник для числа 499664789704823 {ro_metod_Polarda(Decimal("499664789704823"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+start_time = time.time()
+print(f"Дільник для числа 499664789704823 {Brillhart_Morrison(Decimal("499664789704823"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+
+
+start_time = time.time()
+print(f"Дільник для числа 269322119833303 {ro_metod_Polarda(Decimal("269322119833303"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+start_time = time.time()
+print(f"Дільник для числа 269322119833303 {Brillhart_Morrison(Decimal("269322119833303"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+
+
+start_time = time.time()
+print(f"Дільник для числа 679321846483919 {ro_metod_Polarda(Decimal("679321846483919"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+start_time = time.time()
+print(f"Дільник для числа 679321846483919 {Brillhart_Morrison(Decimal("679321846483919"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+
+start_time = time.time()
+print(f"Дільник для числа 96267366284849 {ro_metod_Polarda(Decimal("96267366284849"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+start_time = time.time()
+print(f"Дільник для числа 96267366284849 {Brillhart_Morrison(Decimal("96267366284849"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+
+start_time = time.time()
+print(f"Дільник для числа 61333127792637 {ro_metod_Polarda(Decimal("61333127792637"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+start_time = time.time()
+print(f"Дільник для числа 61333127792637 {Brillhart_Morrison(Decimal("61333127792637"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+
+start_time = time.time()
+print(f"Дільник для числа 2485021628404193 {ro_metod_Polarda(Decimal("2485021628404193"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+start_time = time.time()
+print(f"Дільник для числа 2485021628404193 {Brillhart_Morrison(Decimal("2485021628404193"))}")
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Час виконання: {execution_time:.6f} секунд")
+
