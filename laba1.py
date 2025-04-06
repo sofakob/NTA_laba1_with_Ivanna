@@ -3,8 +3,10 @@ from sympy import primerange, nextprime
 import math
 import numpy as np
 import galois
-from decimal import Decimal
+import decimal 
 import time
+
+
 
 def test_soloveia_shtrasena(p):             
     '''Основна функція її юзаємо, на вхід приймається р, k можна змінювати, як я читала в залежності 
@@ -17,7 +19,7 @@ def test_soloveia_shtrasena(p):
         return False
     for i in range(k):
          x=random.randint(2, p_int-1)
-         x=Decimal(x)
+         x=decimal.Decimal(x)
         
          gcd_p_x=gcd(p, x)
          if gcd_p_x==1:
@@ -39,8 +41,8 @@ def ro_metod_Polarda(n):    # Теж основна функція
     на вихід ми подаємо дільник
 '''
     arr=[]
-    x_start=Decimal(2)
-    y_start=Decimal(2)
+    x_start=decimal.Decimal(2)
+    y_start=decimal.Decimal(2)
     arr.append(0)
     while arr[0]!=1 and x_start<11:
         arr=algoritm_for_ro_metod_Polarda(x_start, y_start, n)
@@ -118,12 +120,12 @@ def jacobi(x, n):
     ''' 
     Символ Якобі, рекурсивний
     '''
-    x=Decimal(x)
+    x=decimal.Decimal(x)
     if x==0 or x==1:
-        return x
+        return decimal.Decimal(x)
     elif x==2:
         exponent=(pow(n, 2)-1)/8
-        j=pow(-1, exponent)
+        j=decimal.Decimal(pow(-1, exponent))
         return j
     elif x%2==0:
         k=0
@@ -135,12 +137,12 @@ def jacobi(x, n):
             return j
         else:
             exponent=(pow(n, 2)-1)/8
-            j=pow(-1, exponent)*jacobi(x, n)
+            j=decimal.Decimal(pow(-1, exponent))*jacobi(x, n)
             return j
     else:
         exponent=(x-1)*(n-1)/4
         modul=n%x
-        j=pow(-1, exponent)*jacobi(modul, x)          
+        j=decimal.Decimal(pow(-1, exponent))*jacobi(modul, x)          
         return j
 
 
@@ -161,18 +163,22 @@ def prime_factorization(n):
         
 
 
-        d=Decimal(ro_metod_Polarda(n))
+        d=decimal.Decimal(ro_metod_Polarda(n))
        
         if d!=0:
-            print(f"Дільник знайдено {d}")
+            print(f"Дільник знайдено {d} методом полларда")
             list_of_divisors.append(d)
             #print(list_of_divisors)
             n/=d
+            print(n)
             cheking_number=test_soloveia_shtrasena(n)
+            print(cheking_number)
             if cheking_number==False:
                 list_of_divisors.append(n)
                 return list_of_divisors
-            divisori_BM=Brillhart_Morrison(n)
+            else:
+                print(555)
+                divisori_BM=Brillhart_Morrison(n)
             if not divisori_BM:
                 return "я не можу знайти канонiчний розклад числа :("
             else:
@@ -205,7 +211,7 @@ exp = r_i_sequence(7, 8)
 
 def trial_division(n):
     
-    prime = [Decimal(2), Decimal(3), Decimal(5), Decimal(7), Decimal(11), Decimal(13), Decimal(17), Decimal(19), Decimal(23), Decimal(29), Decimal(31), Decimal(37), Decimal(41), Decimal(43), Decimal(47)]
+    prime = [decimal.Decimal(2), decimal.Decimal(3), decimal.Decimal(5), decimal.Decimal(7), decimal.Decimal(11), decimal.Decimal(13), decimal.Decimal(17), decimal.Decimal(19), decimal.Decimal(23), decimal.Decimal(29), decimal.Decimal(31), decimal.Decimal(37), decimal.Decimal(41), decimal.Decimal(43), decimal.Decimal(47)]
 
     n_digits = [int(d) for d in str(n)]
     a_i = n_digits[::-1] #список з цифр n в оберненому порядку
@@ -228,13 +234,13 @@ def trial_division(n):
 
 
 def gcd (a,b):
-    
     if a == 0 and b == 0:
         return 0
     elif b == 0:
         return a
     else:
         return gcd(b, a%b)
+
 
 
 def legendre(n, p):
@@ -271,21 +277,19 @@ def factor_B(n):
 
 
 def continued_fraction(n, chain_len): #ланцюговий дріб
-    n_sqrt=n.sqrt()
 
-    alpha = n_sqrt#початкові значення
-    a = Decimal(int(alpha))
+    alpha = math.sqrt(n) #початкові значення
+    a = int(alpha)
     u = a
-    v = Decimal(1)
+    v = 1
 
     a_i = [a]
 
     for i in range(chain_len):
 
         v = (n - u**2)//v
-
-        alpha = (n_sqrt + u)/v
-        a = Decimal(int(alpha))
+        alpha = (decimal.Decimal.sqrt(n) + u)/v
+        a = int(alpha)
         u = a*v - u
 
         a_i.append(a)
@@ -342,7 +346,7 @@ def solve_SLE(A):
 def Brillhart_Morrison(n):
     
     f_base = factor_B(n)
-    b_values = continued_fraction(n, 1000)
+    b_values = continued_fraction(n, 10000)
 
     B_numbers = []
     b_for_x = [] #ті b_i з яких потім можливо буде X
@@ -384,16 +388,17 @@ def Brillhart_Morrison(n):
         for count, p in zip(p_counts, f_base): 
             y *= p ** count
         y = math.isqrt(y)  
-        x=Decimal(x)
-        y=Decimal(y)
+        xsumy=x+y
+        xsumy=int(xsumy)
+        xminus=x-y
+        xminus=int(xminus)
 
-        candidate1 = Decimal(gcd(x + y, n))
-        candidate2 = Decimal(gcd(x - y, n))
-        
+        candidate1 = decimal.Decimal(gcd(xsumy, int(n)))
+        candidate2 = decimal.Decimal(gcd(xminus, int(n)))
 
-        if not test_soloveia_shtrasena(candidate1) and candidate1 not in [1, n]:
+        if not test_soloveia_shtrasena(int(candidate1)) and candidate1 not in [1, n]:
             divisors.add(candidate1)
-        if not test_soloveia_shtrasena(candidate2) and candidate2 not in [1, n]:
+        if not test_soloveia_shtrasena(int(candidate2)) and candidate2 not in [1, n]:
             divisors.add(candidate2)
 
     if  divisors:
@@ -409,8 +414,9 @@ def Brillhart_Morrison(n):
 
 
 
-print(prime_factorization(Decimal("1515475730401555091")))
-      
+print(prime_factorization(decimal.Decimal("1515475730401555091")))
+print(prime_factorization(decimal.Decimal("17350060453153")))
+'''  
 start_time = time.time()
 print(f"Дільник для числа 3009182572376191 {ro_metod_Polarda(Decimal("3009182572376191"))}")
 end_time = time.time()
@@ -526,3 +532,4 @@ end_time = time.time()
 execution_time = end_time - start_time
 print(f"Час виконання: {execution_time:.6f} секунд")
 
+'''

@@ -177,7 +177,7 @@ def Brillhart_Morrison(n):
 
 
 
-n = 4301 
+n = 17350060453153 
 
 print(Brillhart_Morrison(n))
 
