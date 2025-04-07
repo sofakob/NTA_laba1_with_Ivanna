@@ -166,23 +166,26 @@ def prime_factorization(n):
         d=decimal.Decimal(ro_metod_Polarda(n))
        
         if d!=0:
-            print(f"Дільник знайдено {d} методом полларда")
+            print(f"Дільник знайдено {d}")
             list_of_divisors.append(d)
             #print(list_of_divisors)
             n/=d
-            print(n)
+           
             cheking_number=test_soloveia_shtrasena(n)
-            print(cheking_number)
+            
             if cheking_number==False:
                 list_of_divisors.append(n)
                 return list_of_divisors
             else:
-                print(555)
-                divisori_BM=Brillhart_Morrison(n)
+        
+                divisori_BM=Brillhart_Morrison(int(n))
+                
             if not divisori_BM:
                 return "я не можу знайти канонiчний розклад числа :("
             else:
                 list_of_divisors.extend(divisori_BM)
+                for i in divisori_BM:
+                    print(f"Дільник знайдено {i}")
         return list_of_divisors
     else:
         return "Число просте"
@@ -262,12 +265,12 @@ def factor_B(n):
 
     big_l = math.exp(math.sqrt(math.log(n) * math.log(math.log(n))))
     a = 1/math.sqrt(2)
-
+    #a = 7/6
     big_l_a = int(big_l**a)
 
     list_of_prime = list(primerange(1, big_l_a)) #генерує список послідовних простих чисев в діапазоні 1<p<L^a
 
-    factor_base = []
+    factor_base = [-1]
 
     for p in list_of_prime: #до факторної бази додаються всі прості, для яких символ Лежандра = 1
         if legendre(n, p) == 1:
@@ -288,7 +291,7 @@ def continued_fraction(n, chain_len): #ланцюговий дріб
     for i in range(chain_len):
 
         v = (n - u**2)//v
-        alpha = (decimal.Decimal.sqrt(n) + u)/v
+        alpha = (math.sqrt(n) + u)/v
         a = int(alpha)
         u = a*v - u
 
@@ -308,18 +311,29 @@ def continued_fraction(n, chain_len): #ланцюговий дріб
 
 
 #Функція для перевірки на гладкість (b_i)^2modn
-def B_candidate(candidate, f_base): 
+def B_candidate(candidate, f_base):
+    
+    if candidate >= 0:
+        a_candidate = candidate
+    else:
+        a_candidate = -candidate #додали -1 у факторну базу, тепер можна розглядати і від'мні за mod n
+        
     for p in f_base:
-        while candidate % p == 0:
-            candidate //= p
-    return candidate == 1 
+        if p == -1:
+            continue
+        while a_candidate % p == 0:
+            a_candidate //= p
+    return a_candidate == 1 
 
 
 #для розкладу на вектор степенів
 def s_vector(s, f_base):
 
     vector = [0]*len(f_base)
-    for i, p in enumerate(f_base):
+    if s < 0: #для від'ємних гладких
+        vector[0] = 1
+        s = -s
+    for i, p in enumerate(f_base[1:], start=1):
         while s % p == 0:
             s //= p
             vector[i] ^= 1 #одразу вектор з 0 та 1
@@ -330,9 +344,12 @@ def s_vector(s, f_base):
 def solve_SLE(A):
 
     GF2 = galois.GF(2)
-    A_gf2 = GF2(A)
+    A_mat = np.array(A, dtype=int)
+    if A_mat.ndim == 1:
+        A_mat = A_mat.reshape(1, -1)
+    A_gf2 = GF2(A_mat)
     
-    null_space = A_gf2.null_space() #множина всіх розв'зків (список векторів)
+    null_space = A_gf2.T.null_space()#множина всіх розв'зків (список векторів)
 
     #кожен вектор у звичайний список
     basis_solutions = []
@@ -346,25 +363,31 @@ def solve_SLE(A):
 def Brillhart_Morrison(n):
     
     f_base = factor_B(n)
-    b_values = continued_fraction(n, 10000)
+    b_values = continued_fraction(n, 1000)
 
     B_numbers = []
     b_for_x = [] #ті b_i з яких потім можливо буде X
 
     #шукаємо гладкі
     for b in b_values:
-        b_sq = pow(b, 2, n)  
-        if B_candidate(b_sq, f_base):
-            B_numbers.append(b_sq)  
+        b_sq = pow(b, 2, n)
+
+        if b_sq > n // 2:
+            candidate = b_sq - n
+        else:
+            candidate = b_sq
+        if candidate == 0:
+            continue
+        
+        if B_candidate(candidate, f_base):
+            B_numbers.append(candidate)
             b_for_x.append(b)
             
-        if len(B_numbers) > len(f_base):  
+        if len(B_numbers) > len(f_base):
             break
 
-    A = [] #матриця для СЛР
-    for b_sq in B_numbers:
-        A.append(s_vector(b_sq, f_base))
-
+    #матриця для СЛР
+    A = [s_vector(x, f_base) for x in B_numbers]
     solutions = solve_SLE(A)
     divisors = set()
 
@@ -375,37 +398,32 @@ def Brillhart_Morrison(n):
         p_counts = [0]*len(f_base) #список для зберігання відповідних степенів p
 
         for i, j in enumerate(solution):
-            if j and i < len(b_for_x):
+            if j == 1:
                 b = b_for_x[i] #відповідно до розв'язку беремо b для х
-                b_num = B_numbers[i]
                 x *= b
-
+                b_num = B_numbers[i]
+                if b_num < 0:
+                    b_num = -b_num
                 for k, p in enumerate(f_base): #збираємо всі степені простих з відповідних підходящих гладких
+                    if p == -1:
+                        continue
                     while b_num % p == 0:
                         b_num //= p
                         p_counts[k] += 1
 
-        for count, p in zip(p_counts, f_base): 
+        for count, p in zip(p_counts, f_base):
+            if p == -1:
+                continue
             y *= p ** count
         y = math.isqrt(y)  
-        xsumy=x+y
-        xsumy=int(xsumy)
-        xminus=x-y
-        xminus=int(xminus)
 
-        candidate1 = decimal.Decimal(gcd(xsumy, int(n)))
-        candidate2 = decimal.Decimal(gcd(xminus, int(n)))
+        candidate1 = gcd(x + y, n)
+        candidate2 = gcd(x - y, n)
 
-        if not test_soloveia_shtrasena(int(candidate1)) and candidate1 not in [1, n]:
+        if candidate1 not in [1, n]:
             divisors.add(candidate1)
-        if not test_soloveia_shtrasena(int(candidate2)) and candidate2 not in [1, n]:
+        if candidate2 not in [1, n]:
             divisors.add(candidate2)
-
-    if  divisors:
-        for i in divisors:
-            n/=i
-            n=int(n)
-        divisors.add(n)
 
     return divisors
 
@@ -413,9 +431,8 @@ def Brillhart_Morrison(n):
 
 
 
+prime_factorization(decimal.Decimal("1515475730401555091"))
 
-print(prime_factorization(decimal.Decimal("1515475730401555091")))
-print(prime_factorization(decimal.Decimal("17350060453153")))
 '''  
 start_time = time.time()
 print(f"Дільник для числа 3009182572376191 {ro_metod_Polarda(Decimal("3009182572376191"))}")
